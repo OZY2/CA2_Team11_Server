@@ -26,61 +26,61 @@ app.listen(port, () => {
     console.log(`Server running on port`, port);
 });
 
-// Route: Get all Pokemon
-app.get('/allpokemon', async (req, res) => {
+// Route: Get all recyclable items
+app.get('/allrecyclable', async (req, res) => {
     try {
         let connection = await mysql.createConnection(dbConfig);
-        const [rows] = await connection.execute('SELECT * FROM defaultdb.pokemon');
+        const [rows] = await connection.execute('SELECT * FROM defaultdb.recyclable');
         res.json(rows);
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: 'Server error for allpokemon'});
+        res.status(500).json({message: 'Server error for allrecyclable'});
     }
 });
 
-// Route: Create a new Pokemon
-app.post('/addpokemon', async (req, res) => {
-    const { dex_number, name, dex_entry } = req.body;
+// Route: Create a new recyclable item
+app.post('/addrecyclable', async (req, res) => {
+    const { image, name, material, quantity } = req.body;
     try {
         let connection = await mysql.createConnection(dbConfig);
         await connection.execute(
-            'INSERT INTO pokemon (dex_number, name, dex_entry) VALUES (?, ?, ?)',
-            [dex_number, name, dex_entry]
+            'INSERT INTO recyclable (image, name, material, quantity) VALUES (?, ?, ?, ?)',
+            [image, name, material, quantity]
         );
-        res.status(201).json({message: 'Pokemon '+ name + ' added successfully'});
+        res.status(201).json({message: 'Recyclable item '+ name + ' added successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: 'Server error - could not add pokemon ' + name});
+        res.status(500).json({message: 'Server error - could not add recyclable item ' + name});
     }
 });
 
-// Route: Edit/Update a Pokemon
-app.put('/pokemon/:id', async (req, res) => {
-    const { dex_number, name, dex_entry } = req.body;
+// Route: Edit/Update a recyclable item
+app.put('/recyclable/:id', async (req, res) => {
+    const { image, name, material, quantity } = req.body;
     try {
         let connection = await mysql.createConnection(dbConfig);
         await connection.execute(
-            'UPDATE pokemon SET dex_number = ?, name = ?, dex_entry = ? WHERE id = ?',
-            [dex_number, name, dex_entry, req.params.id]
+            'UPDATE recyclable SET image = ?, name = ?, material = ?, quantity = ? WHERE id = ?',
+            [image, name, material, quantity, req.params.id]
         );
-        res.json({message: 'Pokemon updated successfully'});
+        res.json({message: 'Recyclable item updated successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: 'Server error - could not update pokemon'});
+        res.status(500).json({message: 'Server error - could not update recyclable item'});
     }
 });
 
-// Route: Delete a Pokemon
-app.delete('/pokemon/:id', async (req, res) => {
+// Route: Delete a recyclable item
+app.delete('/recyclable/:id', async (req, res) => {
     try {
         let connection = await mysql.createConnection(dbConfig);
         await connection.execute(
-            'DELETE FROM pokemon WHERE id = ?',
+            'DELETE FROM recyclable WHERE id = ?',
             [req.params.id]
         );
-        res.json({message: 'Pokemon deleted successfully'});
+        res.json({message: 'Recyclable item deleted successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: 'Server error - could not delete pokemon'});
+        res.status(500).json({message: 'Server error - could not delete recyclable item'});
     }
 });
