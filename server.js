@@ -4,7 +4,23 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 const port = 3000;
 
-const cors = require("cors");
+//database config info
+const dbConfig = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+    waitForConnections: true,
+    connectionLimit: 100,
+    queueLimit: 0,
+};
+
+//intialize Express app
+const app = express();
+
+// ========== ADD CORS HERE ==========
+const cors = require('cors');
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -28,21 +44,8 @@ app.use(
     credentials: false,
   })
 );
+// ========== END CORS SETUP ==========
 
-//database config info
-const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    waitForConnections: true,
-    connectionLimit: 100,
-    queueLimit: 0,
-};
-
-//intialize Express app
-const app = express();
 //helps app to read JSON
 app.use(express.json());
 
