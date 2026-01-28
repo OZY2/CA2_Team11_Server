@@ -16,12 +16,6 @@ const dbConfig = {
     queueLimit: 0,
 };
 
-app.use(cors({
-  origin: '*', // Allow all origins temporarily
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
 //intialize Express app
 const app = express();
 
