@@ -4,6 +4,14 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 const port = 3000;
 
+const cors = require('cors');
+app.use(cors()); // Allow all origins for development
+// OR for production:
+app.use(cors({
+  origin: 'http://localhost:3000', // Your React app URL
+  credentials: true
+}));
+
 //database config info
 const dbConfig = {
     host: process.env.DB_HOST,
