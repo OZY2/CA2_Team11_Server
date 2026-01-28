@@ -4,13 +4,30 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 const port = 3000;
 
-const cors = require('cors');
-app.use(cors()); // Allow all origins for development
-// OR for production:
-app.use(cors({
-  origin: 'http://localhost:3000', // Your React app URL
-  credentials: true
-}));
+const cors = require("cors");
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://card-app-smoky.vercel.app",
+  "https://c346-ca2-team11.onrender.com"
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (Postman/server-to-server)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false,
+  })
+);
 
 //database config info
 const dbConfig = {
