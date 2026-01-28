@@ -21,6 +21,31 @@ const app = express();
 //helps app to read JSON
 app.use(express.json());
 
+const cors = require("cors");
+
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://card-app-smoky.vercel.app",
+    "https://c346-ca2-team11.onrender.com/"
+];
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            // allow requests with no origin (Postman/server-to-server)
+            if (!origin) return callback(null, true);
+
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error("Not allowed by CORS"));
+        },
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: false,
+    })
+);
+
 //start the server
 app.listen(port, () => {
     console.log(`Server running on port`, port);
