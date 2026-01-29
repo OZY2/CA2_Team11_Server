@@ -28,6 +28,7 @@ const allowedOrigins = [
     "http://localhost:3000",
     "https://card-app-smoky.vercel.app",
     "https://c346-ca2-team11.onrender.com/"
+    "https://ca2-team11-server-0rto.onrender.com/"
 ];
 
 app.use(
