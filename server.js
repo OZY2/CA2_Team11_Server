@@ -52,12 +52,30 @@ app.listen(port, () => {
     console.log(`Server running on port`, port);
 });
 
-// Route: Get all recyclable items
+// Route: Get all recyclable items with automatic fallback
 app.get('/allrecyclable', async (req, res) => {
     try {
         let connection = await mysql.createConnection(dbConfig);
-        const [rows] = await connection.execute('SELECT * FROM defaultdb.recyclable');
-        res.json(rows);
+        
+        // Try defaultdb first
+        try {
+            const [rows] = await connection.execute('SELECT * FROM defaultdb.recyclable');
+            console.log('Successfully fetched from defaultdb');
+            return res.json(rows);
+        } catch (firstError) {
+            // If defaultdb fails, try C346_CA2_dependgone
+            console.log('defaultdb failed, trying C346_CA2_dependgone:', firstError.message);
+            
+            try {
+                const [rows] = await connection.execute('SELECT * FROM C346_CA2_dependgone.recyclable');
+                console.log('Successfully fetched from C346_CA2_dependgone');
+                return res.json(rows);
+            } catch (secondError) {
+                // Both failed
+                console.log('Both schemas failed:', secondError.message);
+                throw new Error('Both schemas failed to fetch data');
+            }
+        }
     } catch (err) {
         console.error(err);
         res.status(500).json({message: 'Server error for allrecyclable'});
