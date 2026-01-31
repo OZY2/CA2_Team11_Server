@@ -3,3 +3,5 @@ I made 2 web service and it functions so that when one of it is down it will sta
 the server.js has routes for appget /allrecyclables which takes all the data from the table recyclables
 appget /recyclable/:id which gets recyclable by specific id
 app.post /addrecyclable which adds recyclables
+app.put /recyclable/:id which edits recyclables by id
+and app.delete /recyclable/:id which deletes recyclables by id
